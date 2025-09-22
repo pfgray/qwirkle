@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qwirkle</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .player-setup {
+            margin-bottom: 20px;
+        }
+        .player-list {
+            margin: 10px 0;
+        }
+        .player {
+            display: inline-block;
+            margin: 5px;
+            padding: 8px 12px;
+            background: #007bff;
+            color: white;
+            border-radius: 4px;
+        }
+        input[type="text"], input[type="number"] {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .score-cell-input {
+            width: 60px;
+            padding: 4px;
+            margin: 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+            background: #f8f9fa;
+        }
+        .score-cell-input:focus {
+            background: white;
+            border-color: #007bff;
+            outline: none;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #218838;
+        }
+        button.danger {
+            background: #dc3545;
+        }
+        button.danger:hover {
+            background: #c82333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        .total-row {
+            font-weight: bold;
+            background-color: #e9ecef;
+        }
+        .score-input {
+            margin: 10px 0;
+        }
+        .current-player {
+            font-weight: bold;
+            color: #007bff;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Qwirkle</h1>
+        
+        <div id="player-setup" class="player-setup">
+            <h2>Add Players</h2>
+            <div>
+                <input type="text" id="player-name" placeholder="Enter player name" maxlength="20">
+                <button onclick="addPlayer()">Add Player</button>
+            </div>
+            <div class="player-list" id="player-list"></div>
+            <div id="continue-section" class="hidden">
+                <button onclick="startGame()">Continue to Game</button>
+            </div>
+        </div>
+
+        <div id="game-section" class="hidden">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h2>Game in Progress</h2>
+                <button class="danger" onclick="resetGame()">Reset Game</button>
+            </div>
+            
+            <div id="score-input-section" class="score-input">
+                <div id="current-player-info"></div>
+                <input type="number" id="score-input" placeholder="Enter score">
+                <button onclick="addScore()">Add Score</button>
+            </div>
+
+            <div id="scores-table"></div>
+        </div>
+    </div>
+
+    <script src="./dist/app.js"></script>
+</body>
+</html>
