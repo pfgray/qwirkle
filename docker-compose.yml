@@ -1,9 +1,12 @@
-version: '3.8'
+version: "3.8"
 
 services:
   qwirkle-app:
-    build: .
+    image: nginx:alpine
     ports:
-      - "8080:80"
+      - "9080:80"
     container_name: qwirkle-score-tracker
     restart: unless-stopped
+    volumes:
+      - ./index.html:/usr/share/nginx/html/index.html:ro
+      - ./dist:/usr/share/nginx/html/dist:ro

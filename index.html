@@ -10,13 +10,7 @@
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f5f5f5;
-        }
-        .container {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background-color: white;
         }
         .player-setup {
             margin-bottom: 20px;
@@ -96,6 +90,66 @@
         }
         .hidden {
             display: none;
+        }
+        .highest-score {
+            color: #28a745;
+        }
+        .lowest-score {
+            color: #007bff;
+        }
+        .desktop-table {
+            display: block;
+        }
+        .mobile-table {
+            display: none;
+        }
+        @media (max-width: 600px) {
+            .desktop-table {
+                display: none;
+            }
+            .mobile-table {
+                display: block;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            .mobile-table table {
+                font-size: 14px;
+            }
+            .mobile-table th, .mobile-table td {
+                padding: 8px 4px;
+            }
+            .mobile-table .score-cell-input {
+                width: 50px;
+            }
+            .mobile-table .player-name-cell {
+                font-weight: bold;
+                background-color: #f8f9fa;
+                word-spacing: 100vw;
+                position: sticky;
+                left: 0;
+                z-index: 1;
+                width: 1%;
+            }
+            .mobile-table thead th:first-child {
+                position: sticky;
+                left: 0;
+                z-index: 2;
+                background-color: #f8f9fa;
+                width: 1%;
+            }
+            .mobile-table thead th:last-child {
+                position: sticky;
+                right: 0;
+                z-index: 2;
+                background-color: #f8f9fa;
+            }
+            .mobile-table td.total-cell {
+                position: sticky;
+                right: 0;
+                z-index: 1;
+                background-color: #e9ecef;
+                font-weight: bold;
+            }
         }
     </style>
 </head>

@@ -171,43 +171,98 @@ class ScoreTracker {
         
         this.updateCurrentPlayerInfo();
         this.updateScoreTable();
+        this.scrollTableToEnd();
         this.saveGameState();
+    }
+
+    private scrollTableToEnd(): void {
+        const mobileTable = document.querySelector('.mobile-table');
+        if (mobileTable) {
+            mobileTable.scrollLeft = mobileTable.scrollWidth;
+        }
     }
 
     private updateScoreTable(): void {
         const tableDiv = document.getElementById('scores-table')!;
-        
+
+        // Preserve scroll position of mobile table
+        const mobileTable = tableDiv.querySelector('.mobile-table');
+        const scrollLeft = mobileTable?.scrollLeft ?? 0;
+
         if (this.gameState.players.length === 0) {
             tableDiv.innerHTML = '';
             return;
         }
 
         const maxRounds = Math.max(...this.gameState.players.map(p => p.scores.length), 1);
-        
-        let tableHTML = '<table><thead><tr><th>Round</th>';
+
+        // Find highest and lowest totals
+        const totals = this.gameState.players.map(p => p.total);
+        const highestTotal = Math.max(...totals);
+        const lowestTotal = Math.min(...totals);
+
+        // Desktop layout: players as columns, rounds as rows
+        let desktopHTML = '<div class="desktop-table"><table><thead><tr><th>Round</th>';
         this.gameState.players.forEach(player => {
-            tableHTML += `<th>${player.name}</th>`;
+            desktopHTML += `<th>${player.name}</th>`;
         });
-        tableHTML += '</tr></thead><tbody>';
-        
+        desktopHTML += '</tr></thead><tbody>';
+
         for (let round = 1; round <= maxRounds; round++) {
-            tableHTML += `<tr><td>Round ${round}</td>`;
+            desktopHTML += `<tr><td>Round ${round}</td>`;
             this.gameState.players.forEach((player, playerIndex) => {
                 const score = player.scores[round - 1];
                 const value = score !== undefined ? score : '';
-                tableHTML += `<td><input type="number" class="score-cell-input" value="${value}" onchange="updateScore(${playerIndex}, ${round - 1}, this.value)" placeholder="-"></td>`;
+                desktopHTML += `<td><input type="number" class="score-cell-input" value="${value}" onchange="updateScore(${playerIndex}, ${round - 1}, this.value)" placeholder="-"></td>`;
             });
-            tableHTML += '</tr>';
+            desktopHTML += '</tr>';
         }
-        
-        tableHTML += '<tr class="total-row"><td>Total</td>';
+
+        desktopHTML += '<tr class="total-row"><td>Total</td>';
         this.gameState.players.forEach(player => {
-            tableHTML += `<td>${player.total}</td>`;
+            let scoreClass = '';
+            if (player.total === highestTotal && highestTotal !== lowestTotal) {
+                scoreClass = 'highest-score';
+            } else if (player.total === lowestTotal && highestTotal !== lowestTotal) {
+                scoreClass = 'lowest-score';
+            }
+            desktopHTML += `<td class="${scoreClass}">${player.total}</td>`;
         });
-        tableHTML += '</tr>';
-        
-        tableHTML += '</tbody></table>';
-        tableDiv.innerHTML = tableHTML;
+        desktopHTML += '</tr>';
+        desktopHTML += '</tbody></table></div>';
+
+        // Mobile layout: players as rows, rounds as columns
+        let mobileHTML = '<div class="mobile-table"><table><thead><tr><th>Player</th>';
+        for (let round = 1; round <= maxRounds; round++) {
+            mobileHTML += `<th>R${round}</th>`;
+        }
+        mobileHTML += '<th>Total</th></tr></thead><tbody>';
+
+        this.gameState.players.forEach((player, playerIndex) => {
+            mobileHTML += `<tr><td class="player-name-cell">${player.name}</td>`;
+            for (let round = 1; round <= maxRounds; round++) {
+                const score = player.scores[round - 1];
+                const value = score !== undefined ? score : '';
+                mobileHTML += `<td><input type="number" class="score-cell-input" value="${value}" onchange="updateScore(${playerIndex}, ${round - 1}, this.value)" placeholder="-"></td>`;
+            }
+            let scoreClass = 'total-cell';
+            if (player.total === highestTotal && highestTotal !== lowestTotal) {
+                scoreClass += ' highest-score';
+            } else if (player.total === lowestTotal && highestTotal !== lowestTotal) {
+                scoreClass += ' lowest-score';
+            }
+            mobileHTML += `<td class="${scoreClass}">${player.total}</td></tr>`;
+        });
+
+        mobileHTML += '</tbody></table></div>';
+
+        tableDiv.innerHTML = desktopHTML + mobileHTML;
+
+        // Restore scroll position of mobile table
+        const newMobileTable = tableDiv.querySelector('.mobile-table');
+        if (newMobileTable) {
+            newMobileTable.scrollLeft = scrollLeft;
+        }
     }
 
     public updateScore(playerIndex: number, roundIndex: number, value: string): void {
