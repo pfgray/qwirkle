@@ -63,11 +63,6 @@ class ScoreTracker {
             return;
         }
 
-        if (this.gameState.players.length >= 6) {
-            alert('Maximum 6 players allowed');
-            return;
-        }
-
         if (this.gameState.players.some(p => p.name === name)) {
             alert('Player name already exists');
             return;

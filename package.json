@@ -1,7 +1,7 @@
 {
   "name": "score-tracker",
   "version": "1.0.0",
-  "description": "A web application to track scores for 3-6 players",
+  "description": "A web application to track scores for players",
   "main": "index.html",
   "scripts": {
     "build": "tsc",
